@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { toUserResponse } from 'src/users/mappers/user.mapper';
 import { UserResponseDto } from 'src/users/dto/user-response.dto';
-import { AuthResponse } from './dto/auth-response.dto';
+import { AuthResponseDto } from './dto/auth-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
 
   async register(
     dto: RegisterDto,
-  ): Promise<AuthResponse> {
+  ): Promise<AuthResponseDto> {
     const exist = await this.usersService.findByEmail(dto.email);
     if (exist) throw new ConflictException('Email already registered');
 
@@ -45,7 +45,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginDto) :Promise<AuthResponse>{
+  async login(dto: LoginDto) :Promise<AuthResponseDto>{
     const user = await this.usersService.findByEmail(dto.email);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
