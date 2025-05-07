@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -22,6 +23,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude() //don't include column in response
   password: string;
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
