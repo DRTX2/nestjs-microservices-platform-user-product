@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   NotFoundException,
@@ -54,5 +55,16 @@ export class UsersController {
     if(!userToUpdate)
         throw new NotFoundException('User not found')
     return toUserResponse(userToUpdate);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteUser(@Param('id') id:string, @CurrentUser() currentUser:{userId:string}){
+    if(currentUser.userId!==id)
+        throw new ForbiddenException('User can not be deleted');
+    const success=await this.usersService.deactivate(id);
+    if(success)
+        throw new NotFoundException('No one row was updated')
+    return {message:"User with id="+id+", was deactivated"}
   }
 }
