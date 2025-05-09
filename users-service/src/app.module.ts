@@ -8,7 +8,15 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal:true,
+      validate: config=>{
+        if(!config.JWT_SECRET){
+          throw new Error('JWT_SECRET is required');
+        }
+        return config;
+      }
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
